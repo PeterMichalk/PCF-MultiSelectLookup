@@ -1,6 +1,17 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
+import { createRoot, Root } from 'react-dom/client';
+import * as React from 'react';
+import { Lookup } from './Lookup';
+import { ILookupRecord, ExtendedEntityRecord, ILookupProps } from "./types";
+type DataSet = ComponentFramework.PropertyTypes.DataSet;
+import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
 
 export class MultiSelectLookup implements ComponentFramework.StandardControl<IInputs, IOutputs> {
+    private _root: Root;
+    private _container: HTMLDivElement;
+    private _context: ComponentFramework.Context<IInputs>;
+    private _notifyOutputChanged: () => void;
+
     /**
      * Empty constructor.
      */
@@ -22,7 +33,9 @@ export class MultiSelectLookup implements ComponentFramework.StandardControl<IIn
         state: ComponentFramework.Dictionary,
         container: HTMLDivElement
     ): void {
-        // Add control initialization code
+        this._container = container;
+        this._context = context;
+        this._notifyOutputChanged = notifyOutputChanged;
     }
 
 
@@ -31,7 +44,32 @@ export class MultiSelectLookup implements ComponentFramework.StandardControl<IIn
      * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
      */
     public updateView(context: ComponentFramework.Context<IInputs>): void {
-        // Add code to update control view
+        this._context = context;
+        const gridParams = context.parameters.records;
+        const lookupRecords: ILookupRecord[] = [];
+        const records: Record<string, DataSetInterfaces.EntityRecord> = gridParams.records;
+        for (const key in records) {
+            let type: string | undefined = "contact";
+            if (records[key].getNamedReference())
+                type = records[key]?.getNamedReference()?.etn
+            const record: ExtendedEntityRecord = records[key] as ExtendedEntityRecord;
+            lookupRecords.push({
+                id: key,
+                entityType: type ?? "",
+                name: record.getValue(record._primaryFieldName)
+            })
+        }
+
+        const props: ILookupProps = {
+            context: context,
+            lookUpRecords: lookupRecords
+        }
+
+        if (!this._root) {
+            this._root = createRoot(this._container);
+        }
+
+        this._root.render(React.createElement(Lookup, props))
     }
 
     /**
@@ -47,6 +85,6 @@ export class MultiSelectLookup implements ComponentFramework.StandardControl<IIn
      * i.e. cancelling any pending remote calls, removing listeners, etc.
      */
     public destroy(): void {
-        // Add code to cleanup control if necessary
+        this._root.unmount();
     }
 }
