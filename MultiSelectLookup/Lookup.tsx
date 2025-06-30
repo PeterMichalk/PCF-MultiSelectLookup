@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { IInputs } from './generated/ManifestTypes';
-import { ExtendedUtils, ExtendedContext, ExecuteRequest, ExtendedWebApi, ILookupOptions, ILookupRecord } from './types';
-import { Link } from '@fluentui/react';
+import { ExtendedUtils, ExtendedContext, ExecuteRequest, ExtendedWebApi, ILookupRecord } from './types';
 import { ILookupProps } from './types';
+import { LookupItem } from './LookupItem';
 
 export const Lookup = (props: ILookupProps) => {
     const [lookups, setLookups] = React.useState(props.lookUpRecords);
@@ -166,27 +165,37 @@ export const Lookup = (props: ILookupProps) => {
     // };
 
 
-    return (<div className='multiSelectLookup'>
-        <div className='lookupObjectListing'>
-            {lookups.map((lookup: ILookupRecord) => {
-                return <div className='lookupObjectListing-item' key={lookup.id}>
-                    {/* {imageUrl && <img src={imageUrl} alt="" height={20} width={20} />} */}
-                    <Link
-                        onClick={() => OpenLookupRecord(lookup)}
-                        underline>
-                        {lookup.name as string}
-                    </Link>
-                    <span className='deleticon' onClick={() => removeItem(lookup)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z" /></svg>
-                    </span>
+    return (
+        <div style={{
+            display: 'flex',
+            borderRadius: "4px",
+            minHeight: '40px',
+            maxHeight: "200px",
+            overflowY: 'auto',
+            border: '1px solid black',
+            padding: "4px",
+            alignItems: "flex-starts"
+        }}>
+            <LookupItem />
+            {/* <div>
+                {lookups.map((lookup: ILookupRecord) => {
+                    return <div key={lookup.id}>
+                        {imageUrl && <img src={imageUrl} alt="" height={20} width={20} />}
+                        <Link
+                            onClick={() => OpenLookupRecord(lookup)}
+                            underline>
+                            {lookup.name as string}
+                        </Link>
+                        <span onClick={() => removeItem(lookup)}>
 
-                </div>
-            }
+                        </span>
+                    </div>
+                }
 
-            )}
-            {/* <span className='divSearch ' onClick={OpenLookupSearch}>
-            </span> */}
+                )}
+                <span className='divSearch ' onClick={OpenLookupSearch}>
+            </span>
+            </div> */}
         </div>
-    </div>)
+    );
 }
-//export default React.memo(MultiSelectLookup);
