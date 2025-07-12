@@ -2,7 +2,7 @@ import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import { createRoot, Root } from 'react-dom/client';
 import * as React from 'react';
 import { Lookup } from './Lookup';
-import { ILookupRecord, ExtendedEntityRecord, ILookupProps } from "./types";
+import { IEntityRef, ExtendedEntityRecord, ILookupProps } from "./types";
 type DataSet = ComponentFramework.PropertyTypes.DataSet;
 import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
 
@@ -46,17 +46,22 @@ export class MultiSelectLookup implements ComponentFramework.StandardControl<IIn
     public updateView(context: ComponentFramework.Context<IInputs>): void {
         this._context = context;
         const gridParams = context.parameters.records;
-        const lookupRecords: ILookupRecord[] = [];
+        const lookupRecords: IEntityRef[] = [];
         const records: Record<string, DataSetInterfaces.EntityRecord> = gridParams.records;
         for (const key in records) {
-            let type: string | undefined = "contact";
-            if (records[key].getNamedReference())
-                type = records[key]?.getNamedReference()?.etn
-            const record: ExtendedEntityRecord = records[key] as ExtendedEntityRecord;
+            // let type: string | undefined;
+            // if (records[key].getNamedReference())
+            //     type = records[key]?.getNamedReference()?.etn
+            // const record: ExtendedEntityRecord = records[key] as ExtendedEntityRecord;
+            // lookupRecords.push({
+            //     id: key,
+            //     entityType: type ?? "",
+            //     name: record.getValue(record._primaryFieldName) as string
+            // })
             lookupRecords.push({
                 id: key,
-                entityType: type ?? "",
-                name: record.getValue(record._primaryFieldName)
+                entityType: "contact",
+                name: `Test Name ${key}`
             })
         }
 

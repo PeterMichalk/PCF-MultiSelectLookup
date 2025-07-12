@@ -4,7 +4,7 @@ import LookupOptions = ComponentFramework.UtilityApi.LookupOptions;
 
 export interface ILookupProps {
     context: ComponentFramework.Context<IInputs>;
-    lookUpRecords: ILookupRecord[]
+    lookUpRecords: IEntityRef[]
 }
 
 interface targetType {
@@ -47,10 +47,16 @@ export interface ILookupOptions extends LookupOptions {
     filters?: [{ filterXml: string, entityLogicalName: string }]
 }
 
-export interface ILookupRecord {
+export interface IEntityRef {
     id: string,
     entityType: string,
-    name: unknown
+    name: string
+}
+
+export interface ILookupItemProps {
+    record: IEntityRef,
+    entityImageURL: string,
+    delete: (entityRef: IEntityRef) => void
 }
 
 export interface ExtendedEntityRecord extends DataSetInterfaces.EntityRecord {

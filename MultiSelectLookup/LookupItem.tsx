@@ -1,29 +1,29 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { IInputs } from './generated/ManifestTypes';
-import { ExtendedUtils, ExtendedContext, ExecuteRequest, ExtendedWebApi, ILookupRecord } from './types';
-import { Link } from '@fluentui/react';
-import { ILookupProps } from './types';
+import { ExtendedUtils, ExtendedContext, ExecuteRequest, ExtendedWebApi, IEntityRef, ILookupItemProps } from './types';
+import { Icon } from '@fluentui/react/lib/Icon';
 
-export const LookupItem = () => {
+export const LookupItem: React.FC<ILookupItemProps> = (props) => {
     const [hovered, setHovered] = useState(false);
     return (
         <div style={{
             display: 'inline-flex',
             flexDirection: 'row',
-            padding: '4px',
-            borderRadius: '5px',
-            backgroundColor: hovered ? 'rgb(189, 219, 253)' : 'rgb(217, 234, 253)',
+            borderRadius: '4px',
+            backgroundColor: hovered ? 'rgb(189, 219, 253)' : 'rgb(235, 243, 252)',
             width: 'fit-content',
             maxWidth: "200px",
             alignItems: 'center',
             color: 'rgb(17, 94, 163)',
+            height: '24px',
             boxShadow: hovered
                 ? '0 4px 6px rgba(0, 0, 0, 0.1)'
                 : '0 2px 4px rgba(0, 0, 0, 0.05)',
-            transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
+            transition: 'background-color 50ms ease, box-shadow 0.3s ease',
             cursor: 'pointer',
-            userSelect: 'none'
+            userSelect: 'none',
+            boxSizing: 'border-box'
         }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
@@ -47,26 +47,29 @@ export const LookupItem = () => {
                 />
                 <span
                     style={{
-                        display: 'inline-block',
+                        display: 'block',
                         minWidth: 0,
                         overflow: 'hidden',
                         whiteSpace: 'nowrap',
                         textOverflow: 'ellipsis',
                         marginLeft: '4px',
                         marginRight: '6px',
-                        textDecoration: hovered ? 'underline' : 'none',
+                        textDecoration: 'underline',
                         flexShrink: 1,
-
+                        fontWeight: 400,
+                        fontSize: '14px',
+                        cursor: 'pointer'
                     }}
-                >lookup Value to test how much space it takes</span>
+                >{props.record.name}</span>
             </div>
-            <div
+            <Icon
                 style={{
-                    marginRight: '5px',
-                    marginLeft: '3px',
-                    flexShrink: 0
+                    marginRight: '4px',
+                    fontSize: '10px',
+                    fontWeight: 'bold',
                 }}
-            >X</div>
+                iconName='Cancel'
+            />
         </div>
     );
 }

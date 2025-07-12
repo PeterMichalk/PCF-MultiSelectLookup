@@ -1,22 +1,27 @@
 import * as React from 'react';
-import { ExtendedUtils, ExtendedContext, ExecuteRequest, ExtendedWebApi, ILookupRecord } from './types';
+import { ExtendedUtils, ExtendedContext, ExecuteRequest, ExtendedWebApi, IEntityRef } from './types';
 import { ILookupProps } from './types';
 import { LookupItem } from './LookupItem';
+import { initializeIcons } from '@fluentui/font-icons-mdl2';
+import { Icon } from '@fluentui/react/lib/Icon';
+initializeIcons();
 
 export const Lookup = (props: ILookupProps) => {
     const [lookups, setLookups] = React.useState(props.lookUpRecords);
+    const [iconSearchHovered, setIconSearchHovered] = React.useState<boolean>(false);
+
     //const imageUrl = props.context.parameters.controlImageURl.raw;
 
     React.useEffect(() => {
         setLookups(props.lookUpRecords);
     }, [props])
 
-    const removeItem = (selectedIt: ILookupRecord) => {
-        setLookups(lookups.filter((it: ILookupRecord) => !(it.id == selectedIt.id && it.entityType == selectedIt.entityType)));
+    const removeItem = (selectedIt: IEntityRef) => {
+        setLookups(lookups.filter((it: IEntityRef) => !(it.id == selectedIt.id && it.entityType == selectedIt.entityType)));
         RemoveItemFromGrid(selectedIt.id);
     };
 
-    const OpenLookupRecord = async (lookupRef: ILookupRecord) => {
+    const OpenLookupRecord = async (lookupRef: IEntityRef) => {
         try {
             const pageInput = {};
 
@@ -110,9 +115,9 @@ export const Lookup = (props: ILookupProps) => {
     //     }
 
     //     const lookupFeildName: string | null = props.context.parameters.parentLookUpFieldName.raw;
-    //     let lookUpValue: null | ILookupRecord[] = null;
+    //     let lookUpValue: null | IEntityRef[] = null;
     //     if (lookupFeildName !== null) {
-    //         lookUpValue = Xrm.Page.getAttribute(lookupFeildName)?.getValue() as ILookupRecord[];
+    //         lookUpValue = Xrm.Page.getAttribute(lookupFeildName)?.getValue() as IEntityRef[];
     //     }
 
     //     const lookupOptions: ILookupOptions = {
@@ -164,38 +169,57 @@ export const Lookup = (props: ILookupProps) => {
     //     }
     // };
 
-
     return (
-        <div style={{
-            display: 'flex',
-            borderRadius: "4px",
-            minHeight: '40px',
-            maxHeight: "200px",
-            overflowY: 'auto',
-            border: '1px solid black',
-            padding: "4px",
-            alignItems: "flex-starts"
-        }}>
-            <LookupItem />
-            {/* <div>
-                {lookups.map((lookup: ILookupRecord) => {
-                    return <div key={lookup.id}>
-                        {imageUrl && <img src={imageUrl} alt="" height={20} width={20} />}
-                        <Link
-                            onClick={() => OpenLookupRecord(lookup)}
-                            underline>
-                            {lookup.name as string}
-                        </Link>
-                        <span onClick={() => removeItem(lookup)}>
-
-                        </span>
-                    </div>
+        <div style={{ position: 'relative', margin: '2px', boxSizing: 'border-box' }}>
+            <div style={{
+                position: 'absolute',
+                top: '4px',
+                right: '18px',
+                zIndex: 1,
+                fontSize: '16px',
+                fontWeight: 400,
+                cursor: 'pointer'
+            }}
+                onMouseEnter={() => setIconSearchHovered(true)}
+                onMouseLeave={() => setIconSearchHovered(false)}
+            >
+                <Icon
+                    style={{
+                        color: iconSearchHovered ? 'rgb(17, 94, 163)' : 'rgb(97, 97, 97)'
+                    }}
+                    iconName='Search'
+                />
+            </div>
+            <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                borderRadius: "4px",
+                backgroundColor: '#f3f3f3',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                gap: "2px",
+                height: "auto",
+                minHeight: '30px',
+                maxHeight: "70px",
+                width: "100%",
+                overflowY: 'auto',
+                padding: "4px",
+                paddingRight: "20px",
+                alignItems: "flex-starts",
+                boxSizing: 'border-box'
+            }}>
+                {lookups.map((lookup: IEntityRef) => {
+                    return (
+                        <LookupItem
+                            key={lookup.id}
+                            record={lookup}
+                            entityImageURL={""}
+                            delete={(entRef: IEntityRef) => { console.log(entRef) }}
+                        />
+                    )
                 }
 
                 )}
-                <span className='divSearch ' onClick={OpenLookupSearch}>
-            </span>
-            </div> */}
+            </div>
         </div>
     );
 }
