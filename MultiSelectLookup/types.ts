@@ -20,10 +20,12 @@ export interface ExecuteRequest {
 }
 
 
-interface PageContext {
-    entityTypeName?: string;
-    entityId?: string;
-    // Add more if needed like `data`, `attributes`, etc.
+export interface IExtendedContextMode extends ComponentFramework.Mode {
+    contextInfo: {
+        entityId: string;
+        entityRecordName: string;
+        entityTypeName: string;
+    }
 }
 
 export interface ExtendedWebApi extends ComponentFramework.WebApi {
@@ -38,10 +40,6 @@ export interface ExtendedUtils extends ComponentFramework.Utility {
     };
 }
 
-export interface ExtendedContext extends ComponentFramework.Context<IInputs> {
-    page?: PageContext;
-}
-
 export interface ILookupOptions extends LookupOptions {
     disableMru?: boolean,
     filters?: [{ filterXml: string, entityLogicalName: string }]
@@ -54,11 +52,19 @@ export interface IEntityRef {
 }
 
 export interface ILookupItemProps {
+    context: ComponentFramework.Context<IInputs>;
     record: IEntityRef,
-    entityImageURL: string,
-    delete: (entityRef: IEntityRef) => void
+    entityImageURL: string
 }
 
 export interface ExtendedEntityRecord extends DataSetInterfaces.EntityRecord {
-    _primaryFieldName: string;
+    _entityReference: {
+        _etn: string;
+        _id: string;
+        _name: string;
+    }
+}
+
+export interface ExtendPaging extends ComponentFramework.PropertyHelper.DataSetApi.Paging {
+    pageNumber: number
 }

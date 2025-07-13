@@ -2,7 +2,7 @@ import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import { createRoot, Root } from 'react-dom/client';
 import * as React from 'react';
 import { Lookup } from './Lookup';
-import { IEntityRef, ExtendedEntityRecord, ILookupProps } from "./types";
+import { IEntityRef, ExtendedEntityRecord, ILookupProps, ExtendPaging } from "./types";
 type DataSet = ComponentFramework.PropertyTypes.DataSet;
 import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
 
@@ -11,6 +11,7 @@ export class MultiSelectLookup implements ComponentFramework.StandardControl<IIn
     private _container: HTMLDivElement;
     private _context: ComponentFramework.Context<IInputs>;
     private _notifyOutputChanged: () => void;
+    private _loadedPageNumber: number;
 
     /**
      * Empty constructor.
@@ -36,6 +37,7 @@ export class MultiSelectLookup implements ComponentFramework.StandardControl<IIn
         this._container = container;
         this._context = context;
         this._notifyOutputChanged = notifyOutputChanged;
+        this._loadedPageNumber = 1;
     }
 
 
@@ -45,23 +47,22 @@ export class MultiSelectLookup implements ComponentFramework.StandardControl<IIn
      */
     public updateView(context: ComponentFramework.Context<IInputs>): void {
         this._context = context;
-        const gridParams = context.parameters.records;
+        const gridParams = context.parameters.items;
+
+        // if ((gridParams.paging as ExtendPaging).pageNumber < this._loadedPageNumber) {
+        //     gridParams.paging.loadExactPage((gridParams.paging as ExtendPaging).pageNumber + 1);
+        //     return;
+        // }
+
+        // this._loadedPageNumber = (gridParams.paging as ExtendPaging).pageNumber;
         const lookupRecords: IEntityRef[] = [];
         const records: Record<string, DataSetInterfaces.EntityRecord> = gridParams.records;
         for (const key in records) {
-            // let type: string | undefined;
-            // if (records[key].getNamedReference())
-            //     type = records[key]?.getNamedReference()?.etn
-            // const record: ExtendedEntityRecord = records[key] as ExtendedEntityRecord;
-            // lookupRecords.push({
-            //     id: key,
-            //     entityType: type ?? "",
-            //     name: record.getValue(record._primaryFieldName) as string
-            // })
+            const record: ExtendedEntityRecord = records[key] as ExtendedEntityRecord;
             lookupRecords.push({
-                id: key,
-                entityType: "contact",
-                name: `Test Name ${key}`
+                id: record._entityReference._id,
+                entityType: record._entityReference._etn,
+                name: record._entityReference._name
             })
         }
 
