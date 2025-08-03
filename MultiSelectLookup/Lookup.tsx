@@ -10,10 +10,8 @@ initializeIcons();
 export const Lookup = (props: ILookupProps) => {
     const [lookups, setLookups] = useState(props.lookUpRecords);
     const [iconSearchHovered, setIconSearchHovered] = useState<boolean>(false);
-    const entityImageURLs = useRef<Record<string, string>>();
     const paging = useRef<ExtendPaging>(props.context.parameters.items.paging as ExtendPaging);
 
-    //const imageUrl = props.context.parameters.controlImageURl.raw;
 
     useEffect(() => {
         setLookups(props.lookUpRecords);

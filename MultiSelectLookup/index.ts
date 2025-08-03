@@ -9,9 +9,6 @@ import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
 export class MultiSelectLookup implements ComponentFramework.StandardControl<IInputs, IOutputs> {
     private _root: Root;
     private _container: HTMLDivElement;
-    private _context: ComponentFramework.Context<IInputs>;
-    private _notifyOutputChanged: () => void;
-    private _loadedPageNumber: number;
 
     /**
      * Empty constructor.
@@ -35,9 +32,6 @@ export class MultiSelectLookup implements ComponentFramework.StandardControl<IIn
         container: HTMLDivElement
     ): void {
         this._container = container;
-        this._context = context;
-        this._notifyOutputChanged = notifyOutputChanged;
-        this._loadedPageNumber = 1;
     }
 
 
@@ -46,15 +40,8 @@ export class MultiSelectLookup implements ComponentFramework.StandardControl<IIn
      * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
      */
     public updateView(context: ComponentFramework.Context<IInputs>): void {
-        this._context = context;
         const gridParams = context.parameters.items;
 
-        // if ((gridParams.paging as ExtendPaging).pageNumber < this._loadedPageNumber) {
-        //     gridParams.paging.loadExactPage((gridParams.paging as ExtendPaging).pageNumber + 1);
-        //     return;
-        // }
-
-        // this._loadedPageNumber = (gridParams.paging as ExtendPaging).pageNumber;
         const lookupRecords: IEntityRef[] = [];
         const records: Record<string, DataSetInterfaces.EntityRecord> = gridParams.records;
         for (const key in records) {

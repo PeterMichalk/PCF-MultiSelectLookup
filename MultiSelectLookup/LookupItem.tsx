@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { IInputs } from './generated/ManifestTypes';
+import { useState, useEffect } from 'react';
 import { IEntityRef, ILookupItemProps, ExtendedUtils, ExecuteRequest, ExtendedWebApi, IExtendedContextMode, ExtendPaging } from './types';
 import { Icon } from '@fluentui/react/lib/Icon';
 import { Spinner, SpinnerSize } from '@fluentui/react';
+import { lookupIcon } from './Icons';
 
 export const LookupItem: React.FC<ILookupItemProps> = (props) => {
     const [hovered, setHovered] = useState(false);
@@ -18,7 +18,7 @@ export const LookupItem: React.FC<ILookupItemProps> = (props) => {
                 entityId: lookupRef.id,
                 width: 80,
                 height: 70,
-                windowPosition: 1 // Centered
+                windowPosition: 1
             };
 
             await props.context.navigation.openForm(navigationOptions, pageInput);
@@ -104,17 +104,10 @@ export const LookupItem: React.FC<ILookupItemProps> = (props) => {
                 alignItems: 'center',
                 flexGrow: 1,
                 overflow: 'hidden',
+                marginLeft: '2px',
+                marginRight: '2px'
             }}>
-                <img
-                    style={{
-                        color: "rgb(17, 94, 163)",
-                        textDecorationColor: "rgb(17, 94, 163)"
-                    }}
-                    width={"30px"}
-                    height={"20px"}
-                    src="https://www.svgrepo.com/show/347900/person.svg"
-                    alt=""
-                />
+                {lookupIcon}
                 <span
                     style={{
                         display: 'block',
