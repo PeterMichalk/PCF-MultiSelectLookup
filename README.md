@@ -12,5 +12,5 @@ a custom solution to enable Multi-Select Lookup functionality in Subgrids within
 You can watch the short demo here:
 👉 https://youtu.be/5vSVr_7l1MM
 
-📸 Screenshots
+📸 Screenshot
 <img width="1318" height="710" alt="MultiSelectLookupImage" src="https://github.com/user-attachments/assets/5bffc8d8-baec-47c7-9c5d-f25a22c69b06" />
