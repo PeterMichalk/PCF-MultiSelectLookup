@@ -29,6 +29,13 @@
                   of-type="SingleLine.Text"
                   usage="input"
                   required="false" />
+        <property name="maxItems"
+                  display-name-key="Max Items"
+                  description-key="Maximum number of items to display"
+                  of-type="Whole.None"
+                  usage="input"
+                  required="false"
+                  default-value="10" />
         <!-- Property node's of-type attribute can be of-type-group attribute.
       Example:
       <type-group name="numbers">
